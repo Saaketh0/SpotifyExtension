@@ -1,0 +1,1 @@
+These are the files to the Chrome Extension I coded that displays the current Spotify Song playing from your Spotify on the top left portion of your browser. Feel free to message me if anything odd happens.
