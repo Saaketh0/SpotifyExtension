@@ -96,6 +96,3 @@ app.get("/current-track", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
-// From last night. The song is appearing but its inbetween a bunch of incoherant shit
-//For tommorow, get the screen neater showing only the song and artist. Also, find out if I need to use the server or index.html and how to
-// incorporate it    into the extension

@@ -4,10 +4,6 @@ chrome.runtime.onInstalled.addListener(() => {
   createPopup();
 });
 
-chrome.action.onClicked.addListener(() => {
-  createPopup();
-});
-
 function createPopup() {
   if (popupWindowId === null) {
     chrome.windows.create(

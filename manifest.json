@@ -2,17 +2,17 @@
   "manifest_version": 3,
   "name": "Spotify Song Shower",
   "version": "1.0",
-  "type": "module",
   "description": "A simple Chrome extension that displays the current song playing from Spotify in the top left corner of the window.",
   "action": {
     "default_popup": "index.html"
   },
-  "dependencies": {
-    "express": "^4.17.1",
-    "node-fetch": "^3.0.0",
-    "querystring": "^0.2.0"
-  },
-  "permissions": ["tabs", "scripting", "activeTab", "notifications"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["script.js"]
+    }
+  ],
+  "permissions": ["tabs"],
   "background": {
     "service_worker": "background.js"
   },
