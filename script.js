@@ -6,7 +6,7 @@ document.getElementById("login-button").addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("showHello").addEventListener("click", async () => {
     fetchCurrentTrack(); // Fetch the current track immediately
-    setInterval(fetchCurrentTrack, 2000); // Poll for the current track every 10 seconds
+    setInterval(fetchCurrentTrack, 1000); // Poll for the current track every second
   });
 });
 
@@ -38,7 +38,7 @@ async function fetchCurrentTrack() {
       currentTrackName = newTrackName;
       updateBoxInAllTabs(currentTrackName);
     }
-    //console.log(currentTrackName); ////////////////////////
+    console.log(currentTrackName); ////////////////////////
     displayTrackInfo(data);
   } catch (error) {
     console.error("Error fetching current track:", error);
@@ -50,11 +50,32 @@ async function fetchCurrentTrack() {
 function updateBoxInAllTabs(trackName) {
   chrome.tabs.query({}, (tabs) => {
     for (let tab of tabs) {
-      //console.log("Updating track name: " + trackName);
+      console.log("Updating track name: " + trackName);
       chrome.scripting.executeScript(
         {
           target: { tabId: tab.id },
-          func: addbox,
+          func: function (trackName) {
+            // Inject the box creation logic here to ensure it's defined in the context
+            const helloBox = document.createElement("div");
+            helloBox.id = "hello-box";
+            helloBox.style.position = "fixed";
+            helloBox.style.top = "0px";
+            helloBox.style.left = "0px";
+            helloBox.style.padding = "5px 10px 5px 10px";
+            helloBox.style.backgroundColor = "#191414";
+            helloBox.style.color = "#1DB954"; // Font color of the text
+            helloBox.style.zIndex = "2**30";
+            helloBox.style.fontFamily = "'Circular', sans-serif";
+            helloBox.style.borderRadius = "0 0 10px 0"; // Rounded bottom-right corner
+            helloBox.style.fontSize = "16px";
+            helloBox.style.textAlign = "center";
+            helloBox.style.whiteSpace = "nowrap";
+            helloBox.style.display = "inline-block"; // Size the box based on content width
+            helloBox.style.boxShadow = "0 0 100px 0 rgba(0, 0, 0, 0.5)";
+
+            helloBox.innerText = "Song: " + trackName;
+            document.body.appendChild(helloBox);
+          },
           args: [trackName],
         },
         (results) => {
@@ -67,32 +88,6 @@ function updateBoxInAllTabs(trackName) {
       );
     }
   });
-}
-
-async function addbox(trackName) {
-  let helloBox = document.getElementById("hello-box");
-  if (!helloBox) {
-    // Creating and styling the box if it doesn't exist
-    helloBox = document.createElement("div");
-    helloBox.id = "hello-box";
-    helloBox.style.position = "fixed";
-    helloBox.style.top = "0px";
-    helloBox.style.left = "0px";
-    helloBox.style.padding = "5px 10px 5px 10px";
-    helloBox.style.backgroundColor = "#191414";
-    helloBox.style.color = "#1DB954"; // Font color of the text
-    helloBox.style.zIndex = "2**30";
-    helloBox.style.fontFamily = "'Circular', sans-serif";
-    helloBox.style.borderRadius = "0 0 10px 0"; // Rounded bottom-right corner
-    helloBox.style.fontSize = "16px";
-    helloBox.style.textAlign = "center";
-    helloBox.style.whiteSpace = "nowrap";
-    helloBox.style.display = "inline-block"; // Size the box based on content width
-    helloBox.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)"; // Adjusted box shadow
-    document.body.appendChild(helloBox);
-  }
-  // Update the content of the box
-  helloBox.innerText = "Song: " + trackName;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -137,8 +132,8 @@ function displayTrackInfo(data) {
   }
 }
 
-// Poll for the current track every 10 seconds
-setInterval(fetchCurrentTrack, 2000);
+// Poll for the current track every second
+setInterval(fetchCurrentTrack, 1000);
 
 // Fetch the current track when the page loads
 fetchCurrentTrack();
